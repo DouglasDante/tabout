@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     let isDisabledByDefault = vscode.workspace.getConfiguration("tabout").get('disableByDefault');
     context.workspaceState.update("tabout-active", (isDisabledByDefault ? false: true));
-
+    // 주석 기입 테스트
     context.subscriptions.push(
         vscode.commands.registerCommand('toggle-tabout', () => {
             let currentState =  context.workspaceState.get("tabout-active");
