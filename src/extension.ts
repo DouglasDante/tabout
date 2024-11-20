@@ -12,10 +12,12 @@ export function activate(context: vscode.ExtensionContext) {
 
     let isDisabledByDefault = vscode.workspace.getConfiguration("tabout").get('disableByDefault');
     context.workspaceState.update("tabout-active", (isDisabledByDefault ? false: true));
-    // 주석 기입 테스트
+    
     context.subscriptions.push(
+        // 텝 아웃을 껐다 켰다 하는 명령
         vscode.commands.registerCommand('toggle-tabout', () => {
             let currentState =  context.workspaceState.get("tabout-active");
+            // true, false 값을 뒤집는다
             context.workspaceState.update("tabout-active", !currentState );
             window.showInformationMessage("TabOut is " + (!currentState ? "" : " NOT ") + "active");
         }));
@@ -23,13 +25,15 @@ export function activate(context: vscode.ExtensionContext) {
 
      let tabout = vscode.commands.registerCommand('tabout', () => {
         // The code you place here will be executed every time your command is executed
+        // 활성된 텍스트 에디터를 가져와서(탭)
         let editor = window.activeTextEditor;
 
         //vscode.commands.executeCommand("acceptSelectedSuggestion");
-
+        // 에디터가 비었으면 종료
         if(!editor)
             return;
 
+        // 워크스페이스에서 '탭아웃' 토글이 활성돼 있지 않으면 기존 탭 명령(다중 공백) 실행
         if(!context.workspaceState.get('tabout-active') ){
             commands.executeCommand("tab");
             return;
