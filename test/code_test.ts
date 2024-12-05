@@ -3,7 +3,6 @@ import * as vscode from 'vscode'
 export class CharacterSet {
   public open: string
   public close: string
-  // IC 또는 문자열에 대하여 대입 연산을 진행한다
   constructor(o: ICharacterSet)
   constructor(o: string, c: string)
   constructor(o: string | ICharacterSet, c?: string) {
@@ -20,10 +19,9 @@ export class CharacterSet {
    *  패키지 구성에서 charactersToTabOutFrom 섹션으로 가서 특수문자 코드를 가져와 ICharacterSet[]로 만든 뒤,
    *  이를 map 함수를 통해 각각의 요소를 CharacterSet으로 만들어 Array<CharacterSet>으로 반환한다
    * 
-   * @return `Array<CharacterSet>`
    */
   public static loadCharacterSets(): Array<CharacterSet> {
-    return vscode.workspace.getConfiguration(`tabout`).get<ICharacterSet[]>(`charactersToTabOutFrom`, [
+    return vscode.workspace.getConfiguration(`ctabout`).get<ICharacterSet[]>(`charactersToTabOutFrom`, [
       { open: '[', close: ']' },
       { open: '{', close: '}' },
       { open: '(', close: ')' },
@@ -44,3 +42,4 @@ export interface ICharacterSet {
   open: string
   close: string
 }
+

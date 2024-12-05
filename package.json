@@ -1,9 +1,9 @@
 {
-  "name": "TabOut",
-  "displayName": "TabOut",
-  "description": "Tab out of quotes, brackets, etc",
-  "version": "0.2.2",
-  "publisher": "albert",
+  "name": "ctabout",
+  "displayName": "cTabOut",
+  "description": "뒤로 전개를 포함한 커스텀 탭아웃",
+  "version": "1.0.2",
+  "publisher": "Dougals Dante",
   "engines": {
     "vscode": "^1.22.0"
   },
@@ -16,7 +16,7 @@
     "type": "git",
     "url": "https://github.com/albertromkes/tabout.git"
   },
-  "icon": "images/Tab-Key.jpg",
+  "icon": "images/keyboard-tab_119005.jpg",
   "categories": [
     "Other"
   ],
@@ -27,14 +27,14 @@
   "contributes": {
     "configuration": {
       "type": "object",
-      "title": "TabOut configuration",
+      "title": "cTabOut configuration",
       "properties": {
-        "tabout.disableByDefault": {
+        "ctabout.disableByDefault": {
           "type": "boolean",
           "default": false,
           "description": "Disables the TabOut extension by default"
         },
-        "tabout.charactersToTabOutFrom": {
+        "ctabout.charactersToTabOutFrom": {
           "type": "array",
           "description": "Sets of opening and closing character pairs to be able to tab out from.",
           "default": [
@@ -109,15 +109,26 @@
     },
     "commands": [
       {
-        "command": "toggle-tabout",
-        "title": "Toggle TabOut"
+        "command": "ctoggle-tabout",
+        "title": "cToggle TabOut"
       }
     ],
     "keybindings": [
       {
-        "command": "tabout",
+        "command": "ctabout",
         "key": "tab",
         "mac": "tab",
+        "when": "editorTextFocus && !suggestWidgetVisible && !inlineSuggestionVisible && !inSnippetMode && !editorHasMultipleSelections"
+      },
+      {
+        "-command": "show-col",
+        "-key": "alt+ctrl+numpad2",
+        "-when": "editorTextFocus && !suggestWidgetVisible && !inlineSuggestionVisible && !inSnippetMode && !editorHasMultipleSelections"
+      },
+      {
+        "command": "back-tabout",
+        "key": "shift+tab",
+        "mac": "shift+tab",
         "when": "editorTextFocus && !suggestWidgetVisible && !inlineSuggestionVisible && !inSnippetMode && !editorHasMultipleSelections"
       }
     ]

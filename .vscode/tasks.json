@@ -5,20 +5,21 @@
 // ${fileDirname}: the current opened file's dirname
 // ${fileExtname}: the current opened file's extension
 // ${cwd}: the current working directory of the spawned process
-
 // A task runner that calls a custom npm script that compiles the extension.
 {
     "version": "2.0.0",
-
     // we want to run npm
     "command": "npm",
-
     // we run the custom script "compile" as defined in package.json
-    "args": ["run", "compile", "--loglevel", "silent"],
-
+    "args": [
+        "run",
+        "compile",
+        "--loglevel",
+        "silent"
+    ],
     // The tsc compiler is started in watching mode
-    "isWatching": true,
-
+    // "isWatching": true,
+    "isBackground": true,
     // use the standard tsc in watch mode problem matcher to find compile problems in the output.
     "problemMatcher": "$tsc-watch",
     "tasks": [
@@ -38,6 +39,47 @@
                 "_id": "build",
                 "isDefault": false
             }
+        },
+        {
+            "type": "shell",
+            "command": "ts-node",
+            "args": [
+                "${file}"
+            ],
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "ts-node: 활성 파일 실행 by custom"
+        },
+        {
+            "type": "shell",
+            "command": "tsc",
+            "args": [
+                "-p",
+                "./tsconfig.json",
+                "&",
+                "node",
+                "./target/main.js"
+            ],
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "tsc: 빌드 및 실행 - tsconfig.json by custom"
+        },
+        {
+            "type": "shell",
+            "command": "tsc",
+            "args": [
+                "-p",
+                "./tsconfig.json",
+            ],
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "group": "build",
+            "label": "tsc: 빌드 - tsconfig.json by custom"
         }
     ]
 }
