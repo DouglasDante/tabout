@@ -2,7 +2,7 @@
   "name": "ctabout",
   "displayName": "cTabOut",
   "description": "뒤로 전개를 포함한 커스텀 탭아웃",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "Dougals Dante",
   "engines": {
     "vscode": "^1.22.0"
@@ -121,14 +121,16 @@
         "when": "editorTextFocus && !suggestWidgetVisible && !inlineSuggestionVisible && !inSnippetMode && !editorHasMultipleSelections"
       },
       {
-        "-command": "show-col",
-        "-key": "alt+ctrl+numpad2",
-        "-when": "editorTextFocus && !suggestWidgetVisible && !inlineSuggestionVisible && !inSnippetMode && !editorHasMultipleSelections"
-      },
-      {
         "command": "back-tabout",
         "key": "shift+tab",
         "mac": "shift+tab",
+        "when": "editorTextFocus && !suggestWidgetVisible && !inlineSuggestionVisible && !inSnippetMode && !editorHasMultipleSelections"
+      }
+    ],
+    "-keybindings": [
+      {
+        "command": "show-col",
+        "key": "alt+ctrl+numpad1",
         "when": "editorTextFocus && !suggestWidgetVisible && !inlineSuggestionVisible && !inSnippetMode && !editorHasMultipleSelections"
       }
     ]

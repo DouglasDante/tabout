@@ -23,7 +23,7 @@ export class CharacterSet {
    * @return `Array<CharacterSet>`
    */
   public static loadCharacterSets(): Array<CharacterSet> {
-    return vscode.workspace.getConfiguration(`tabout`).get<ICharacterSet[]>(`charactersToTabOutFrom`, [
+    return vscode.workspace.getConfiguration(`ctabout`).get<ICharacterSet[]>(`charactersToTabOutFrom`, [
       { open: '[', close: ']' },
       { open: '{', close: '}' },
       { open: '(', close: ')' },

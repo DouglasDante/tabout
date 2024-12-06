@@ -35,11 +35,12 @@ export function determineNextSpecialCharPosition(charInfo: CharacterSet, text: s
     if (positionNextOpenChar == -1) {
         //find first other special character    
         // 현재 커서 위치에서 코드를 짤라서
-        var strToSearchIn = text.substr(position);
-        var counter = position;
+        // var strToSearchIn = text.substr(position);
+        let strToSearchIn = text.substring(position);
+        let counter = position;
 
         // 내용물을 하나하나 비교 검새개한다.
-        for (var char of strToSearchIn) {
+        for (let char of strToSearchIn) {
             counter++;
             let info = characterSetsToTabOutFrom().find(c => c.open == char || c.close == char);
 
@@ -68,11 +69,12 @@ export function determinePreviousSpecialCharPosition(charInfo: CharacterSet, tex
     if (positionPreviousOpenChar == -1) {
         //find first other special character    
         // 현재 커서 위치에서 코드를 짤라서
-        var strToSearchIn = text.substr(position);
-        var counter = position;
+        // var strToSearchIn = text.substr(position);
+        let strToSearchIn = text.substring(position);
+        let counter = position;
 
         // 내용물을 하나하나 비교 검새개한다.
-        for (var char of strToSearchIn) {
+        for (let char of strToSearchIn) {
             counter++;
             let info = characterSetsToTabOutFrom().find(c => c.open == char || c.close == char);
 

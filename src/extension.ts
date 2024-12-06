@@ -45,22 +45,22 @@ export function activate(context: vscode.ExtensionContext) {
     let currentPositionInLine = editor.selection.active.character;
 
     // window.showInformationMessage("현재 열 위치: " + editor.selection.active.character);
-    if (currentPositionInLine == 0) {
-      commands.executeCommand("tab");
-      return;
-    }
+    // if (currentPositionInLine == 0) {
+    //   commands.executeCommand("tab");
+    //   return;
+    // }
 
-    if (editor.selection.active.character > 0) {
-      // 현재 커서가 있는 줄의 코드를 가져와서(0~현재 커서 열까지)
-      var rangeBeforeCurrentPosition = new Range(new Position(editor.selection.active.line, 0), new Position(editor.selection.active.line, currentPositionInLine));
-      // 가져온 범위의 코드를 문자열로 바꾼 뒤
-      var textBeforeCurrentPosition = editor.document.getText(rangeBeforeCurrentPosition);
-      // 내용물이 없으면 그냥 탭
-      if (textBeforeCurrentPosition.trim() == "") {
-        commands.executeCommand("tab");
-        return;
-      }
-    }
+    // if (editor.selection.active.character > 0) {
+    //   // 현재 커서가 있는 줄의 코드를 가져와서(0~현재 커서 열까지)
+    //   var rangeBeforeCurrentPosition = new Range(new Position(editor.selection.active.line, 0), new Position(editor.selection.active.line, currentPositionInLine));
+    //   // 가져온 범위의 코드를 문자열로 바꾼 뒤
+    //   var textBeforeCurrentPosition = editor.document.getText(rangeBeforeCurrentPosition);
+    //   // 내용물이 없으면 그냥 탭
+    //   if (textBeforeCurrentPosition.trim() == "") {
+    //     commands.executeCommand("tab");
+    //     return;
+    //   }
+    // }
 
     // Previous character special?
     // 바로 직전 문자를 가져온다
@@ -99,6 +99,12 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
 
+    {
+      commands.executeCommand("tab");
+
+      return;
+    }
+
     //Next character special?
     return selectNextCharacter(currentLineText, currentPositionInLine);
   });
@@ -125,24 +131,23 @@ export function activate(context: vscode.ExtensionContext) {
     let currentPositionInLine = editor.selection.active.character;
 
     // window.showInformationMessage("back_tabout, 현재 열 위치: " + editor.selection.active.character);
-    if (currentPositionInLine == 0) {
-      commands.executeCommand("shift+tab");
-      return;
-    }
+    // if (currentPositionInLine == 0) {
+    //   commands.executeCommand("outdent");
+    //   return;
+    // }
 
     if (editor.selection.active.character > 0) {
       // 현재 커서가 있는 줄의 코드를 가져와서(0~현재 커서 열까지)
       var rangeBeforeCurrentPosition = new Range(new Position(editor.selection.active.line, 0), new Position(editor.selection.active.line, currentPositionInLine));
       // 가져온 범위의 코드를 문자열로 바꾼 뒤
       var textBeforeCurrentPosition = editor.document.getText(rangeBeforeCurrentPosition);
-      // 내용물이 없으면 그냥 탭
+      // 내용물이 없으면 그냥 백탭
       if (textBeforeCurrentPosition.trim() == "") {
-        commands.executeCommand("shift+tab");
+        commands.executeCommand("outdent");
         return;
       }
     }
 
-    // Previous character special?
     // 바로 다음 문자를 가져온다
     let nextCharacter = getPreviousChar(currentPositionInLine, currentLineText);
 
@@ -167,6 +172,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (characterInfo !== undefined) {
       //no tab, put selection just before the next special character
+      // 직전 특수문자 위치를 가져와서
       let positionPreviousSpecialCharacter = determinePreviousSpecialCharPosition(characterInfo, currentLineText, currentPositionInLine);
 
       // 특수 문자가 발견 되었을 경우
@@ -178,8 +184,14 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
 
-    //Next character special?
-    return selectNextCharacter(currentLineText, currentPositionInLine);
+    {
+      commands.executeCommand("outdent");
+
+      return;
+    }
+
+    // Previous character special?
+    return selectPreviousCharacter(currentLineText, currentPositionInLine);
   });
 
   // let show_col = vscode.commands.registerCommand('show-col', () => {
@@ -190,11 +202,14 @@ export function activate(context: vscode.ExtensionContext) {
 
   //   // let test_str = "Apples are round, and apples are juicy.";
 
-  //   let get_nc = getNextChar(currentPositionInLine, currentLineText);
+  //   // let get_nc = getNextChar(currentPositionInLine, currentLineText);
 
   //   // window.showInformationMessage("바로 다음 문자 가져오기: " + getPreviousChar(currentPositionInLine, currentLineText));
-  //   window.showInformationMessage("tab 입력 테스트");
-  //   commands.executeCommand("tab");
+  //   // window.showInformationMessage("tab 입력 테스트");
+  //   // commands.executeCommand("tab");
+
+  //   window.showInformationMessage("명령 실행");
+  //   commands.executeCommand("outdent");
   // });
 
   context.subscriptions.push(ctabout);
