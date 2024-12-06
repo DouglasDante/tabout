@@ -87,6 +87,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     if (characterInfo !== undefined) {
       //no tab, put selection just before the next special character
+      // 직후 특별 문자 위치를 가져와서
       let positionNextSpecialCharacter = determineNextSpecialCharPosition(characterInfo, currentLineText, currentPositionInLine);
 
       // 특수 문자가 발견 되었을 경우
@@ -99,13 +100,8 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
 
-    {
-      commands.executeCommand("tab");
-
-      return;
-    }
-
     //Next character special?
+    // 직후 문자가 특별하면 커서를 우측 한 칸 이동시킨다
     return selectNextCharacter(currentLineText, currentPositionInLine);
   });
 
@@ -119,9 +115,9 @@ export function activate(context: vscode.ExtensionContext) {
     if (!editor)
       return;
 
-    // 워크스페이스에서 '탭아웃' 토글이 활성돼 있지 않으면 기존 탭 명령(다중 공백) 실행
+    // 워크스페이스에서 '탭아웃' 토글이 활성돼 있지 않으면 기존 백탭 명령 실행
     if (!context.workspaceState.get('ctabout-active')) {
-      commands.executeCommand("tab");
+      commands.executeCommand("outdent");
       return;
     }
 
@@ -136,20 +132,20 @@ export function activate(context: vscode.ExtensionContext) {
     //   return;
     // }
 
-    if (editor.selection.active.character > 0) {
-      // 현재 커서가 있는 줄의 코드를 가져와서(0~현재 커서 열까지)
-      var rangeBeforeCurrentPosition = new Range(new Position(editor.selection.active.line, 0), new Position(editor.selection.active.line, currentPositionInLine));
-      // 가져온 범위의 코드를 문자열로 바꾼 뒤
-      var textBeforeCurrentPosition = editor.document.getText(rangeBeforeCurrentPosition);
-      // 내용물이 없으면 그냥 백탭
-      if (textBeforeCurrentPosition.trim() == "") {
-        commands.executeCommand("outdent");
-        return;
-      }
-    }
+    // if (editor.selection.active.character > 0) {
+    //   // 현재 커서가 있는 줄의 코드를 가져와서(0~현재 커서 열까지)
+    //   var rangeBeforeCurrentPosition = new Range(new Position(editor.selection.active.line, 0), new Position(editor.selection.active.line, currentPositionInLine));
+    //   // 가져온 범위의 코드를 문자열로 바꾼 뒤
+    //   var textBeforeCurrentPosition = editor.document.getText(rangeBeforeCurrentPosition);
+    //   // 내용물이 없으면 그냥 백탭
+    //   if (textBeforeCurrentPosition.trim() == "") {
+    //     commands.executeCommand("outdent");
+    //     return;
+    //   }
+    // }
 
     // 바로 다음 문자를 가져온다
-    let nextCharacter = getPreviousChar(currentPositionInLine, currentLineText);
+    let nextCharacter = getNextChar(currentPositionInLine, currentLineText);
 
     // 패키지에서 정의하고 있는 타겟문자 목록을 배열로 만들어 가져온 뒤
     // 다음 문자와 같은 요소를 찾는다.
@@ -184,37 +180,39 @@ export function activate(context: vscode.ExtensionContext) {
       }
     }
 
-    {
-      commands.executeCommand("outdent");
+    // {
+    //   commands.executeCommand("outdent");
 
-      return;
-    }
+    //   return;
+    // }
 
     // Previous character special?
     return selectPreviousCharacter(currentLineText, currentPositionInLine);
   });
 
-  // let show_col = vscode.commands.registerCommand('show-col', () => {
-  //   let editor = window.activeTextEditor;
+  let show_col = vscode.commands.registerCommand('show-col', () => {
+    let editor = window.activeTextEditor;
 
-  //   let currentLineText = editor.document.lineAt(editor.selection.active.line).text;
-  //   let currentPositionInLine = editor.selection.active.character;
+    let currentLineText = editor.document.lineAt(editor.selection.active.line).text;
+    let currentPositionInLine = editor.selection.active.character;
 
-  //   // let test_str = "Apples are round, and apples are juicy.";
+    let index_position = currentPositionInLine;
 
-  //   // let get_nc = getNextChar(currentPositionInLine, currentLineText);
+    for (; index_position > -1; index_position -= 1) {
+      if (currentLineText.charAt(index_position) == "v") {
+        window.showInformationMessage("v 위치 반환: " + index_position);
 
-  //   // window.showInformationMessage("바로 다음 문자 가져오기: " + getPreviousChar(currentPositionInLine, currentLineText));
-  //   // window.showInformationMessage("tab 입력 테스트");
-  //   // commands.executeCommand("tab");
+        break;
+      }
+    }
 
-  //   window.showInformationMessage("명령 실행");
-  //   commands.executeCommand("outdent");
-  // });
+    window.showInformationMessage("v 위치 반환: " + currentLineText.indexOf("v", 5));
+    // commands.executeCommand("outdent");
+  });
 
   context.subscriptions.push(ctabout);
   context.subscriptions.push(back_tabout);
-  // context.subscriptions.push(show_col);
+  context.subscriptions.push(show_col);
 }
 
 // this method is called when your extension is deactivated

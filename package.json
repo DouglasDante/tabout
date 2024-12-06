@@ -125,6 +125,11 @@
         "key": "shift+tab",
         "mac": "shift+tab",
         "when": "editorTextFocus && !suggestWidgetVisible && !inlineSuggestionVisible && !inSnippetMode && !editorHasMultipleSelections"
+      },
+      {
+        "command": "show-col",
+        "key": "alt+ctrl+numpad1",
+        "when": "editorTextFocus && !suggestWidgetVisible && !inlineSuggestionVisible && !inSnippetMode && !editorHasMultipleSelections"
       }
     ],
     "-keybindings": [

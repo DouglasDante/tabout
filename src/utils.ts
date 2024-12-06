@@ -58,32 +58,68 @@ export function determineNextSpecialCharPosition(charInfo: CharacterSet, text: s
 
 export function determinePreviousSpecialCharPosition(charInfo: CharacterSet, text: string, position: number): number {
     // 커서가 현재 위치한 줄의 코드(text)에서 타겟문자(charInfo)를 position-1의 위치에서 부터 검색한다.
-    let positionPreviousOpenChar = text.indexOf(charInfo.open, position - 1);
+    // let positionPreviousOpenChar = text.indexOf(charInfo.open, position - 1);
 
-    // open 타겟 문자를 못 찾으면 close 타겟 문자를 검색한다.
+    let positionPreviousOpenChar = -1;
+    let index_position = position
+    for (; index_position > -1; index_position -= 1) {
+        if (charInfo.close == text.charAt(index_position)) {
+            positionPreviousOpenChar = index_position;
+
+            break;
+        }
+    }
+
+    // close 타겟 문자를 못 찾으면 open 타겟 문자를 검색한다.
     if (positionPreviousOpenChar == -1) {
-        positionPreviousOpenChar = text.indexOf(charInfo.close, position - 1);
+        index_position = position;
+
+        for (; index_position > -1; index_position -= 1) {
+            if (charInfo.open == text.charAt(index_position)) {
+                {
+                    positionPreviousOpenChar = index_position;
+
+                    break;
+                }
+            }
+        }
     }
 
     // 값을 찾지 못 했을 경우
     if (positionPreviousOpenChar == -1) {
         //find first other special character    
         // 현재 커서 위치에서 코드를 짤라서
-        // var strToSearchIn = text.substr(position);
-        let strToSearchIn = text.substring(position);
-        let counter = position;
 
-        // 내용물을 하나하나 비교 검새개한다.
-        for (let char of strToSearchIn) {
-            counter++;
-            let info = characterSetsToTabOutFrom().find(c => c.open == char || c.close == char);
+        // let strToSearchIn = text.substring(position);
+        // let counter = position;
+        index_position = position;
 
-            // 검색 중 값이 발견되면 해당 위치(열)를 리턴 값에 대입 시킨 뒤 반복문을 나간다.
+        let index_char = '';
+
+        // 내용물을 하나하나 비교 검색 한다.
+        for (; index_position > -1; index_position -= 1) {
+            index_char = text.charAt(index_position);
+
+            let info = characterSetsToTabOutFrom().find(c => c.open == index_char || c.close == index_char);
+
             if (info !== undefined) {
-                positionPreviousOpenChar = counter;
+                positionPreviousOpenChar = index_position;
+
                 break;
             }
         }
+
+        // for (let char of strToSearchIn) {
+        //     counter++;
+        //     let info = characterSetsToTabOutFrom().find(c => c.open == char || c.close == char);
+
+        //     // 검색 중 값이 발견되면 해당 위치(열)를 리턴 값에 대입 시킨 뒤 반복문을 나간다.
+        //     if (info !== undefined) {
+        //         positionPreviousOpenChar = counter;
+        //         break;
+        //     }
+        // }
+
         // 값을 발견하지 못 하면 positionNextOpenChar 값은 그대로 -1이 된다.
     }
 
@@ -91,14 +127,15 @@ export function determinePreviousSpecialCharPosition(charInfo: CharacterSet, tex
 }
 
 export function selectNextCharacter(text: string, position: number) {
-    // 타겟 문자를 가져와서
+    // 직후 문자를 가져와서
     let nextCharacter = getNextChar(position, text);
 
     // 한번 더 검사를 한 뒤
     let indxNext = characterSetsToTabOutFrom().find(o => o.open == nextCharacter || o.close == nextCharacter)
+    // 타겟문자 목록에서 일치하는 값이 발견되면
     if (indxNext !== undefined) {
         //no tab, put selection just AFTER the next special character 
-        // 커서를 한 칸 더 이동시킨 위치를 할당하여
+        // 커서를 한 칸 우측으로 이동시킨 위치를 할당하여
         let nextCursorPosition = new Position(window.activeTextEditor.selection.active.line, position + 1);
 
         // 해당 위치 값을 반환한다
@@ -110,12 +147,13 @@ export function selectNextCharacter(text: string, position: number) {
 }
 
 export function selectPreviousCharacter(text: string, position: number) {
-    // 타겟 문자를 가져와서
+    // 직전 문자를 가져와서
     let previousCharacter = getPreviousChar(position, text);
 
     // 한번 더 검사를 한 뒤
     let indxPrevious = characterSetsToTabOutFrom().find(o => o.open == previousCharacter || o.close == previousCharacter)
 
+    // 타겟문자 목록에서 일치하는 값이 발견되면
     if (indxPrevious !== undefined) {
         //no tab, put selection just AFTER the next special character 
         // 커서를 한 칸 뒤로 이동시킨 위치를 할당하여
@@ -126,5 +164,5 @@ export function selectPreviousCharacter(text: string, position: number) {
     }
 
     // Default
-    commands.executeCommand("shift+tab");
+    commands.executeCommand("outdent");
 }
